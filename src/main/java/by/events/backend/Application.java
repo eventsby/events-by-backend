@@ -36,7 +36,6 @@ public class Application {
         dataSource.setUrl(datasourceUrl);
         dataSource.setUsername(databaseUsername);
         dataSource.setPassword(databasePassword);
-
         return dataSource;
     }
 
