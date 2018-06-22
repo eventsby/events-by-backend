@@ -48,3 +48,4 @@ CREATE TABLE IF NOT EXISTS oauth_approvals (
 	status VARCHAR(10),
 	expiresAt TIMESTAMP,
 	lastModifiedAt TIMESTAMP
+);
