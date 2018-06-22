@@ -1,6 +1,5 @@
 package by.events.backend.model.entity;
 
-import by.events.backend.model.Event;
 import by.events.backend.model.base.BaseEntity;
 import by.events.backend.model.dto.UserDto;
 import com.fasterxml.jackson.annotation.JsonIgnore;
