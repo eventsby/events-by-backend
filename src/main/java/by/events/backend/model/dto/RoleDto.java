@@ -8,13 +8,23 @@ import java.util.List;
 
 public class RoleDto extends BaseDto {
 
+    private long id;
     private String name;
 
     public RoleDto() {
     }
 
-    public RoleDto(String name) {
+    public RoleDto(long id, String name) {
+        this.id = id;
         this.name = name;
+    }
+
+    public long getId() {
+        return id;
+    }
+
+    public void setId(long id) {
+        this.id = id;
     }
 
     public String getName() {
@@ -26,7 +36,7 @@ public class RoleDto extends BaseDto {
     }
 
     public static RoleDto toDto(Role role) {
-        return new RoleDto(role.getName());
+        return new RoleDto(role.getId(), role.getName());
     }
 
     public static List<RoleDto> toDto(List<Role> roles) {

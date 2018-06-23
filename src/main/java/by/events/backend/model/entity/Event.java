@@ -6,6 +6,7 @@ import by.events.backend.model.dto.EventDto;
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import java.util.Date;
+import java.util.Set;
 
 @Entity
 @Table(name = "events")
@@ -39,16 +40,39 @@ public class Event extends AuditableEntity<Long> {
     @JoinColumn(name = "user_id")
     private User user;
 
-    public Event() {
-    }
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "location_id")
+    private Location location;
 
-    public Event(String name, String description, Date startDate, Date endDate, String imageUrl, User user) {
+    @OneToMany(mappedBy = "event", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    private Set<Tag> tags;
+
+    public Event() { }
+
+    public Event(String name, String description, Date startDate, Date endDate, String imageUrl, User user, Location location) {
         this.name = name;
         this.description = description;
         this.startDate = startDate;
         this.endDate = endDate;
         this.imageUrl = imageUrl;
         this.user = user;
+        this.location = location;
+    }
+
+    public Location getLocation() {
+        return location;
+    }
+
+    public void setLocation(Location location) {
+        this.location = location;
+    }
+
+    public Set<Tag> getTags() {
+        return tags;
+    }
+
+    public void setTags(Set<Tag> tags) {
+        this.tags = tags;
     }
 
     public String getName() {
@@ -103,8 +127,9 @@ public class Event extends AuditableEntity<Long> {
         User user = User.toEntity(eventDto.getUser());
         Date startDate = new Date(eventDto.getStartDate());
         Date endDate = new Date(eventDto.getEndDate());
+        Location location = Location.toEntity(eventDto.getLocation());
         return new Event(eventDto.getName(), eventDto.getDescription(), startDate,
-                endDate, eventDto.getImageUrl(), user);
+                endDate, eventDto.getImageUrl(), user, location);
     }
 
 }
