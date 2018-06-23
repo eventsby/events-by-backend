@@ -68,6 +68,9 @@ public class User extends BaseEntity {
         this.password = user.getPassword();
         this.roles = user.getRoles();
         this.fullname = user.getFullname();
+        this.phone = user.getPhone();
+        this.website = user.getWebsite();
+        this.company = user.getCompany();
     }
 
     public User(String email, String username, String password, List<Role> roles) {
@@ -77,12 +80,15 @@ public class User extends BaseEntity {
         this.roles = roles;
     }
 
-    public User(String email, String username, String password, boolean enabled, String fullname) {
+    public User(String email, String username, String password, boolean enabled, String fullname, String company, String website, String phone) {
         this.email = email;
         this.username = username;
         this.password = new BCryptPasswordEncoder().encode(password);
         this.enabled = enabled;
         this.fullname = fullname;
+        this.company = company;
+        this.website = website;
+        this.phone = phone;
     }
 
     public String getEmail() {
@@ -166,8 +172,9 @@ public class User extends BaseEntity {
     }
 
     public static User toEntity(UserDto userDto) {
-        return new User(userDto.getEmail(), userDto.getUsername(),
-                userDto.getPassword(), userDto.isEnabled(), userDto.getFullname());
+        return new User(userDto.getEmail(), userDto.getUsername(), userDto.getPassword(),
+                userDto.isEnabled(), userDto.getFullname(), userDto.getCompany(),
+                userDto.getWebsite(), userDto.getPhone());
     }
 
 }
