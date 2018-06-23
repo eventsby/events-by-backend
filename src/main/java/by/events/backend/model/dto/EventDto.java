@@ -36,6 +36,16 @@ public class EventDto extends BaseDto {
         this.location = location;
     }
 
+    public EventDto(long id, String name, String description, long startDate, long endDate, String imageUrl, UserDto user) {
+        this.id = id;
+        this.name = name;
+        this.description = description;
+        this.startDate = startDate;
+        this.endDate = endDate;
+        this.imageUrl = imageUrl;
+        this.user = user;
+    }
+
     public long getId() {
         return id;
     }
@@ -104,10 +114,15 @@ public class EventDto extends BaseDto {
         long startDate = event.getStartDate().getTime() / 1000;
         long endDate = event.getEndDate().getTime() / 1000;
         UserDto user = UserDto.toDto(event.getUser());
-        LocationDto location = LocationDto.toDto(event.getLocation());
 
-        return new EventDto(event.getId(), event.getName(), event.getDescription(), startDate,
-                endDate, event.getImageUrl(), user, location);
+        EventDto eventDto = new EventDto(event.getId(), event.getName(), event.getDescription(), startDate,
+                endDate, event.getImageUrl(), user);
+
+        if (event.getLocation() != null) {
+            eventDto.setLocation(LocationDto.toDto(event.getLocation()));
+        }
+
+        return eventDto;
     }
 
     public static List<EventDto> toDto(List<Event> events) {
