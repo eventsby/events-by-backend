@@ -21,10 +21,10 @@ import javax.sql.DataSource;
 @EnableAuthorizationServer
 public class AuthorizationServerConfiguration extends AuthorizationServerConfigurerAdapter {
 
-    private static final String CLIENT = "clientapp";
+    public static final String CLIENT = "clientapp";
+    public static final String SECRET = "123456";
     private static final String SCOPE_READ = "read";
     private static final String SCOPE_WRITE = "write";
-    private static final String SECRET = "123456";
     private static final String RESOURCE_ID = "restservice";
     private static final String AUTHORITY_USER = "USER";
     private static final String GRANT_TYPE_PASSWORD = "password";
