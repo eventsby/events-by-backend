@@ -1,6 +1,8 @@
 package by.events.backend.configuration;
 
 import by.events.backend.configuration.security.AuthorizationServerConfiguration;
+import com.google.common.base.Predicate;
+import com.google.common.base.Predicates;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.bind.annotation.RestController;
@@ -27,9 +29,9 @@ public class SwaggerConfig {
     public Docket api() {
         return new Docket(DocumentationType.SWAGGER_2)
                 .select()
-                //.apis(RequestHandlerSelectors.any())
-                .apis(RequestHandlerSelectors.withClassAnnotation(RestController.class))
+                .apis(RequestHandlerSelectors.any())
                 .paths(PathSelectors.any())
+                .paths(Predicates.not(PathSelectors.regex("/error.*")))
                 .build()
                 .securitySchemes(Collections.singletonList(securityScheme()))
                 .securityContexts(Collections.singletonList(securityContext()))
@@ -42,7 +44,7 @@ public class SwaggerConfig {
                 "This is a staging REST API for Events BY Project",
                 "v1",
                 "Terms of service",
-                new Contact("Alexander Tereshkov", "www.example.com", "a.tereshkov@gmail.com"),
+                new Contact("Events BY", "https://eventsby.herokuapp.com/", "a.tereshkov@gmail.com"),
                 "License of API", "API license URL", Collections.emptyList());
     }
 
