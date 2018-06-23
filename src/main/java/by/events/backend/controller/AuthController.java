@@ -16,7 +16,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 @RestController
-@RequestMapping(ApiConstants.API_URL + ApiConstants.URL_AUTH)
+@RequestMapping(ApiConstants.URL_AUTH)
 public class AuthController {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(AuthController.class);
