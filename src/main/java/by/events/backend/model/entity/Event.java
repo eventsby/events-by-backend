@@ -1,6 +1,7 @@
 package by.events.backend.model.entity;
 
 import by.events.backend.model.base.AuditableEntity;
+import by.events.backend.model.dto.EventDto;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
@@ -96,6 +97,14 @@ public class Event extends AuditableEntity<Long> {
 
     public void setUser(User user) {
         this.user = user;
+    }
+
+    public static Event toEntity(EventDto eventDto) {
+        User user = User.toEntity(eventDto.getUser());
+        Date startDate = new Date(eventDto.getStartDate());
+        Date endDate = new Date(eventDto.getEndDate());
+        return new Event(eventDto.getName(), eventDto.getDescription(), startDate,
+                endDate, eventDto.getImageUrl(), user);
     }
 
 }
