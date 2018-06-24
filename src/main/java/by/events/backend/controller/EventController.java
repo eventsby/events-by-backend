@@ -2,8 +2,11 @@ package by.events.backend.controller;
 
 import by.events.backend.model.dto.EventDto;
 import by.events.backend.model.entity.Event;
+import by.events.backend.model.entity.Organaizer;
 import by.events.backend.model.entity.User;
 import by.events.backend.service.EventService;
+import by.events.backend.service.OrganaizerService;
+import by.events.backend.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -18,10 +21,14 @@ import org.springframework.web.bind.annotation.*;
 public class EventController {
 
     private final EventService eventService;
+    private final UserService userService;
+    private final OrganaizerService organaizerService;
 
     @Autowired
-    public EventController(EventService eventService) {
+    public EventController(EventService eventService, UserService userService, OrganaizerService organaizerService) {
         this.eventService = eventService;
+        this.userService = userService;
+        this.organaizerService = organaizerService;
     }
 
     @RequestMapping(value = "/{id}", method = RequestMethod.GET)
@@ -34,9 +41,25 @@ public class EventController {
 
     @RequestMapping(method = RequestMethod.POST)
     @ResponseBody
-    public ResponseEntity<?> addEvent(@RequestBody EventDto eventDto) {
+    public ResponseEntity<?> addEvent(@AuthenticationPrincipal User userPrincipal,
+                                      @RequestBody EventDto eventDto) {
+        User user = userService.findOne(userPrincipal.getId());
         Event event = Event.toEntity(eventDto);
-        eventService.saveOrUpdate(event);
+
+        // TODO Refactor this shit
+        Organaizer organaizer = organaizerService.findOne(user.getId());
+        if (organaizer != null) {
+            event.setOrganaizer(organaizer);
+            eventService.saveOrUpdate(event);
+            organaizer.getEvents().add(event);
+            organaizerService.saveOrUpdate(organaizer);
+        } else {
+            Organaizer newOrg = new Organaizer(user);
+            event.setOrganaizer(newOrg);
+            eventService.saveOrUpdate(event);
+            newOrg.getEvents().add(event);
+            organaizerService.saveOrUpdate(newOrg);
+        }
         return new ResponseEntity<>(EventDto.toDto(event), HttpStatus.CREATED);
     }
 
