@@ -7,6 +7,7 @@ import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import java.util.Date;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 @Entity
@@ -49,7 +50,7 @@ public class Event extends AuditableEntity<Long> {
     private Set<Tag> tags;
 
     @ManyToMany(fetch = FetchType.LAZY, mappedBy = "events")
-    private Set<User> participants = new HashSet<>();
+    private List<User> participants;
 
     public Event() { }
 
@@ -63,11 +64,11 @@ public class Event extends AuditableEntity<Long> {
         this.location = location;
     }
 
-    public Set<User> getParticipants() {
+    public List<User> getParticipants() {
         return participants;
     }
 
-    public void setParticipants(Set<User> participants) {
+    public void setParticipants(List<User> participants) {
         this.participants = participants;
     }
 
