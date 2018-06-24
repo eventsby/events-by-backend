@@ -136,10 +136,16 @@ public class Event extends AuditableEntity<Long> {
     }
 
     public static Event toEntity(EventDto eventDto) {
-        Organaizer organaizer = Organaizer.toEntity(eventDto.getOrganaizer());
+        Organaizer organaizer = new Organaizer();
+        if (eventDto.getOrganaizer() != null) {
+            organaizer = Organaizer.toEntity(eventDto.getOrganaizer());
+        }
+        Location location = new Location();
+        if (eventDto.getLocation() != null) {
+            location = Location.toEntity(eventDto.getLocation());
+        }
         Date startDate = new Date(eventDto.getStartDate());
         Date endDate = new Date(eventDto.getEndDate());
-        Location location = Location.toEntity(eventDto.getLocation());
         return new Event(eventDto.getName(), eventDto.getDescription(), startDate,
                 endDate, eventDto.getImageUrl(), organaizer, location);
     }
