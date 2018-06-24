@@ -2,11 +2,13 @@ package by.events.backend.model.dto;
 
 import by.events.backend.model.base.BaseDto;
 import by.events.backend.model.entity.Event;
+import by.events.backend.model.entity.User;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public class EventDto extends BaseDto {
@@ -127,7 +129,8 @@ public class EventDto extends BaseDto {
         long startDate = event.getStartDate().getTime() / 1000;
         long endDate = event.getEndDate().getTime() / 1000;
         OrganaizerDto organaizer = OrganaizerDto.toDto(event.getOrganaizer());
-        List<UserDto> participants = UserDto.toDto(event.getParticipants());
+        List<User> userList = new ArrayList<>(event.getParticipants());
+        List<UserDto> participants = UserDto.toDto(userList);
 
         EventDto eventDto = new EventDto(event.getId(), event.getName(), event.getDescription(), startDate,
                 endDate, event.getImageUrl(), organaizer, participants);
