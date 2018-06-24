@@ -24,28 +24,31 @@ public class EventDto extends BaseDto {
     @JsonProperty("image_url")
     private String imageUrl;
 
-    private UserDto user;
+    private OrganaizerDto organaizer;
     private LocationDto location;
+    private List<UserDto> participants;
 
-    public EventDto(long id, String name, String description, long startDate, long endDate, String imageUrl, UserDto user, LocationDto location) {
+    public EventDto(long id, String name, String description, long startDate, long endDate, String imageUrl, OrganaizerDto organaizer, LocationDto location, List<UserDto> participants) {
         this.id = id;
         this.name = name;
         this.description = description;
         this.startDate = startDate;
         this.endDate = endDate;
         this.imageUrl = imageUrl;
-        this.user = user;
+        this.organaizer = organaizer;
         this.location = location;
+        this.participants = participants;
     }
 
-    public EventDto(long id, String name, String description, long startDate, long endDate, String imageUrl, UserDto user) {
+    public EventDto(long id, String name, String description, long startDate, long endDate, String imageUrl, OrganaizerDto organaizer, List<UserDto> participants) {
         this.id = id;
         this.name = name;
         this.description = description;
         this.startDate = startDate;
         this.endDate = endDate;
         this.imageUrl = imageUrl;
-        this.user = user;
+        this.organaizer = organaizer;
+        this.participants = participants;
     }
 
     public long getId() {
@@ -96,12 +99,20 @@ public class EventDto extends BaseDto {
         this.imageUrl = imageUrl;
     }
 
-    public UserDto getUser() {
-        return user;
+    public OrganaizerDto getOrganaizer() {
+        return organaizer;
     }
 
-    public void setUser(UserDto user) {
-        this.user = user;
+    public void setOrganaizer(OrganaizerDto organaizer) {
+        this.organaizer = organaizer;
+    }
+
+    public List<UserDto> getParticipants() {
+        return participants;
+    }
+
+    public void setParticipants(List<UserDto> participants) {
+        this.participants = participants;
     }
 
     public LocationDto getLocation() {
@@ -115,10 +126,11 @@ public class EventDto extends BaseDto {
     public static EventDto toDto(Event event) {
         long startDate = event.getStartDate().getTime() / 1000;
         long endDate = event.getEndDate().getTime() / 1000;
-        UserDto user = UserDto.toDto(event.getUser());
+        OrganaizerDto organaizer = OrganaizerDto.toDto(event.getOrganaizer());
+        List<UserDto> participants = UserDto.toDto(event.getParticipants());
 
         EventDto eventDto = new EventDto(event.getId(), event.getName(), event.getDescription(), startDate,
-                endDate, event.getImageUrl(), user);
+                endDate, event.getImageUrl(), organaizer, participants);
 
         if (event.getLocation() != null) {
             eventDto.setLocation(LocationDto.toDto(event.getLocation()));

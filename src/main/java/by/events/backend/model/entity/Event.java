@@ -6,6 +6,7 @@ import by.events.backend.model.dto.EventDto;
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import java.util.Date;
+import java.util.HashSet;
 import java.util.Set;
 
 @Entity
@@ -37,8 +38,8 @@ public class Event extends AuditableEntity<Long> {
     private String imageUrl;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "user_id")
-    private User user;
+    @JoinColumn(name = "organaizer_id")
+    private Organaizer organaizer;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "location_id")
@@ -47,16 +48,27 @@ public class Event extends AuditableEntity<Long> {
     @OneToMany(mappedBy = "event", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     private Set<Tag> tags;
 
+    @ManyToMany(fetch = FetchType.LAZY, mappedBy = "events")
+    private Set<User> participants = new HashSet<>();
+
     public Event() { }
 
-    public Event(String name, String description, Date startDate, Date endDate, String imageUrl, User user, Location location) {
+    public Event(String name, String description, Date startDate, Date endDate, String imageUrl, Organaizer organaizer, Location location) {
         this.name = name;
         this.description = description;
         this.startDate = startDate;
         this.endDate = endDate;
         this.imageUrl = imageUrl;
-        this.user = user;
+        this.organaizer = organaizer;
         this.location = location;
+    }
+
+    public Set<User> getParticipants() {
+        return participants;
+    }
+
+    public void setParticipants(Set<User> participants) {
+        this.participants = participants;
     }
 
     public Location getLocation() {
@@ -115,21 +127,21 @@ public class Event extends AuditableEntity<Long> {
         this.imageUrl = imageUrl;
     }
 
-    public User getUser() {
-        return user;
+    public Organaizer getOrganaizer() {
+        return organaizer;
     }
 
-    public void setUser(User user) {
-        this.user = user;
+    public void setOrganaizer(Organaizer organaizer) {
+        this.organaizer = organaizer;
     }
 
     public static Event toEntity(EventDto eventDto) {
-        User user = User.toEntity(eventDto.getUser());
+        Organaizer organaizer = Organaizer.toEntity(eventDto.getOrganaizer());
         Date startDate = new Date(eventDto.getStartDate());
         Date endDate = new Date(eventDto.getEndDate());
         Location location = Location.toEntity(eventDto.getLocation());
         return new Event(eventDto.getName(), eventDto.getDescription(), startDate,
-                endDate, eventDto.getImageUrl(), user, location);
+                endDate, eventDto.getImageUrl(), organaizer, location);
     }
 
 }

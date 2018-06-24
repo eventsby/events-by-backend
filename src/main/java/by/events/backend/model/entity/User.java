@@ -2,13 +2,11 @@ package by.events.backend.model.entity;
 
 import by.events.backend.model.base.BaseEntity;
 import by.events.backend.model.dto.UserDto;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import java.util.List;
-import java.util.Set;
 
 @Entity
 @Table(name = "users")
@@ -43,7 +41,6 @@ public class User extends BaseEntity {
     @Column(name = "phone")
     private String phone;
 
-    @JsonIgnore
     @ManyToMany(fetch = FetchType.EAGER) // cascade = {CascadeType.ALL}
     @JoinTable(name = "user_roles",
             joinColumns = {@JoinColumn(name = "user_id", referencedColumnName = "id")},
@@ -51,8 +48,16 @@ public class User extends BaseEntity {
     )
     private List<Role> roles;
 
-    @OneToMany(mappedBy = "user", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-    private Set<Event> events;
+    @ManyToMany(fetch = FetchType.EAGER) // cascade = {CascadeType.ALL}
+    @JoinTable(name = "user_events",
+            joinColumns = {@JoinColumn(name = "user_id", referencedColumnName = "id")},
+            inverseJoinColumns = {@JoinColumn(name = "event_id", referencedColumnName = "id")}
+    )
+    private List<Event> events;
+
+    @OneToOne
+    @JoinColumn(name = "organaizer_id")
+    private Organaizer organaizer;
 
     public User() {
     }
@@ -73,13 +78,6 @@ public class User extends BaseEntity {
         this.company = user.getCompany();
     }
 
-    public User(String email, String username, String password, List<Role> roles) {
-        this.email = email;
-        this.username = username;
-        this.password = new BCryptPasswordEncoder().encode(password);
-        this.roles = roles;
-    }
-
     public User(String email, String username, String password, boolean enabled, String fullname, String company, String website, String phone) {
         this.email = email;
         this.username = username;
@@ -89,6 +87,14 @@ public class User extends BaseEntity {
         this.company = company;
         this.website = website;
         this.phone = phone;
+    }
+
+    public List<Event> getEvents() {
+        return events;
+    }
+
+    public void setEvents(List<Event> events) {
+        this.events = events;
     }
 
     public String getEmail() {
@@ -163,12 +169,12 @@ public class User extends BaseEntity {
         this.roles = roles;
     }
 
-    public Set<Event> getEvents() {
-        return events;
+    public Organaizer getOrganaizer() {
+        return organaizer;
     }
 
-    public void setEvents(Set<Event> events) {
-        this.events = events;
+    public void setOrganaizer(Organaizer organaizer) {
+        this.organaizer = organaizer;
     }
 
     public static User toEntity(UserDto userDto) {

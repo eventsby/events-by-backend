@@ -1,7 +1,6 @@
 package by.events.backend.model.entity;
 
 import by.events.backend.model.base.BaseEntity;
-import org.codehaus.jackson.annotate.JsonIgnore;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
@@ -19,7 +18,6 @@ public class Role extends BaseEntity {
     private String name;
 
     @ManyToMany(fetch = FetchType.LAZY, mappedBy = "roles")
-    @JsonIgnore
     private Set<User> users = new HashSet<>();
 
     public Role() {
