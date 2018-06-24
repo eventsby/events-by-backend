@@ -12,6 +12,9 @@ public class OrganaizerDto extends BaseDto {
     @JsonProperty("user_data")
     private UserDto userDto;
 
+    public OrganaizerDto() {
+    }
+
     public OrganaizerDto(UserDto userDto) {
         this.userDto = userDto;
     }

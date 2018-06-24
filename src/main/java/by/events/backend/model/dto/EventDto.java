@@ -30,6 +30,9 @@ public class EventDto extends BaseDto {
     private LocationDto location;
     private List<UserDto> participants;
 
+    public EventDto() {
+    }
+
     public EventDto(long id, String name, String description, long startDate, long endDate, String imageUrl, OrganaizerDto organaizer, LocationDto location, List<UserDto> participants) {
         this.id = id;
         this.name = name;
