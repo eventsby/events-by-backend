@@ -26,10 +26,10 @@ public class Location extends BaseEntity {
     private String address;
 
     @Column(name = "longitude")
-    private String longitude;
+    private double longitude;
 
     @Column(name = "latitude")
-    private String latitude;
+    private double latitude;
 
     @OneToMany(mappedBy = "location", fetch = FetchType.LAZY, cascade = {CascadeType.MERGE, CascadeType.PERSIST})
     private Set<Event> events;
@@ -37,7 +37,7 @@ public class Location extends BaseEntity {
     public Location() {
     }
 
-    public Location(String country, String city, String address, String longitude, String latitude) {
+    public Location(String country, String city, String address, double longitude, double latitude) {
         this.country = country;
         this.city = city;
         this.address = address;
@@ -69,19 +69,19 @@ public class Location extends BaseEntity {
         this.address = address;
     }
 
-    public String getLongitude() {
+    public double getLongitude() {
         return longitude;
     }
 
-    public void setLongitude(String longitude) {
+    public void setLongitude(double longitude) {
         this.longitude = longitude;
     }
 
-    public String getLatitude() {
+    public double getLatitude() {
         return latitude;
     }
 
-    public void setLatitude(String latitude) {
+    public void setLatitude(double latitude) {
         this.latitude = latitude;
     }
 
