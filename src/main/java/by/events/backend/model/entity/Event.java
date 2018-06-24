@@ -41,7 +41,7 @@ public class Event extends AuditableEntity<Long> {
     @JoinColumn(name = "organaizer_id")
     private Organaizer organaizer;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.PERSIST)
     @JoinColumn(name = "location_id")
     private Location location;
 
