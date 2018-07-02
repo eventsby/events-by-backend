@@ -37,8 +37,8 @@ public class SwaggerConfig {
                 .paths(Predicates.not(PathSelectors.regex("/oauth/authorize")))
                 .paths(Predicates.not(PathSelectors.regex("/error.*")))
                 .build()
-                .securitySchemes(Collections.singletonList(securityScheme()))
-                .securityContexts(Collections.singletonList(securityContext()))
+                //.securitySchemes(Collections.singletonList(securityScheme()))
+                //.securityContexts(Collections.singletonList(securityContext()))
                 .apiInfo(apiInfo());
     }
 
