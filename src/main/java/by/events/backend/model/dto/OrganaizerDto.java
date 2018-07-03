@@ -2,7 +2,7 @@ package by.events.backend.model.dto;
 
 import by.events.backend.model.base.BaseDto;
 import by.events.backend.model.entity.Organaizer;
-import org.codehaus.jackson.annotate.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import java.util.ArrayList;
 import java.util.List;
