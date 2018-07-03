@@ -2,6 +2,8 @@ package by.events.backend.model.dto;
 
 import by.events.backend.model.base.BaseDto;
 import by.events.backend.model.entity.Organaizer;
+import by.events.backend.model.entity.User;
+import org.codehaus.jackson.annotate.JsonIgnore;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -16,6 +18,9 @@ public class OrganaizerDto extends BaseDto {
     private String website;
     private String phone;
 
+    @JsonIgnore
+    private UserDto userDto;
+
     public OrganaizerDto() {
     }
 
@@ -27,6 +32,8 @@ public class OrganaizerDto extends BaseDto {
         this.company = userDto.getCompany();
         this.website = userDto.getWebsite();
         this.phone = userDto.getPhone();
+
+        this.userDto = userDto;
     }
 
     public long getId() {
@@ -83,6 +90,14 @@ public class OrganaizerDto extends BaseDto {
 
     public void setPhone(String phone) {
         this.phone = phone;
+    }
+
+    public UserDto getUserDto() {
+        return userDto;
+    }
+
+    public void setUserDto(UserDto userDto) {
+        this.userDto = userDto;
     }
 
     public static OrganaizerDto toDto(Organaizer organaizer) {
