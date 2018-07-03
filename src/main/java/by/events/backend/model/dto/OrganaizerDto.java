@@ -2,7 +2,6 @@ package by.events.backend.model.dto;
 
 import by.events.backend.model.base.BaseDto;
 import by.events.backend.model.entity.Organaizer;
-import by.events.backend.model.entity.User;
 import org.codehaus.jackson.annotate.JsonIgnore;
 
 import java.util.ArrayList;
@@ -92,6 +91,7 @@ public class OrganaizerDto extends BaseDto {
         this.phone = phone;
     }
 
+    @JsonIgnore
     public UserDto getUserDto() {
         return userDto;
     }
