@@ -2,6 +2,7 @@ package by.events.backend.model.dto;
 
 import by.events.backend.model.base.BaseDto;
 import by.events.backend.model.entity.User;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -11,7 +12,10 @@ public class UserDto extends BaseDto {
     private long id;
     private String email;
     private String username;
+
+    @JsonIgnore
     private String password;
+
     private boolean enabled;
     private String fullname;
     private String company;
