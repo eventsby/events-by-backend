@@ -38,6 +38,11 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
+    public Page<User> findByEventId(Long eventId, Pageable pageable) {
+        return userRepository.findByEvents_id(eventId, pageable);
+    }
+
+    @Override
     public User findOne(long id) {
         return userRepository.findOne(id);
     }

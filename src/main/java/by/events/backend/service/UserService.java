@@ -14,6 +14,8 @@ public interface UserService {
 
     Page<User> findAllByPage(Pageable pageable);
 
+    Page<User> findByEventId(Long eventId, Pageable pageable);
+
     User findOne(long id);
 
     void delete(long id);
