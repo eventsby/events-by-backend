@@ -52,6 +52,9 @@ public class EventParticipantsController {
             return new ResponseEntity<>("User not found", HttpStatus.NOT_FOUND);
         }
 
+        if (event.getParticipants().contains(participant)) {
+            return new ResponseEntity<>("User already participate in event", HttpStatus.NOT_FOUND);
+        }
         event.getParticipants().add(participant);
         eventService.saveOrUpdate(event);
         participant.getEvents().add(event);
@@ -75,6 +78,9 @@ public class EventParticipantsController {
             return new ResponseEntity<>("User not found", HttpStatus.NOT_FOUND);
         }
 
+        if (!event.getParticipants().contains(participant)) {
+            return new ResponseEntity<>("User isn't participating in this event", HttpStatus.NOT_FOUND);
+        }
         event.getParticipants().remove(participant);
         eventService.saveOrUpdate(event);
         participant.getEvents().remove(event);
