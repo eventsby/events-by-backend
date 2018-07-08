@@ -1,5 +1,6 @@
 package by.events.backend.controller;
 
+import by.events.backend.model.dto.ErrorResponseDto;
 import by.events.backend.model.dto.EventDto;
 import by.events.backend.model.entity.Event;
 import by.events.backend.model.entity.Organaizer;
@@ -76,7 +77,9 @@ public class EventController {
                                          @PathVariable("id") long id) {
         Event event = eventService.getById(id);
         if (event == null) {
-            return new ResponseEntity<>("Event not found", HttpStatus.NOT_FOUND);
+            ErrorResponseDto error = new ErrorResponseDto("Event",
+                    "Event not found");
+            return new ResponseEntity<>(error, HttpStatus.NOT_FOUND);
         }
 
         eventService.delete(id);

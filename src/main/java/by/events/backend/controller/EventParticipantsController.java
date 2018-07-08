@@ -1,5 +1,6 @@
 package by.events.backend.controller;
 
+import by.events.backend.model.dto.ErrorResponseDto;
 import by.events.backend.model.dto.EventDto;
 import by.events.backend.model.dto.UserDto;
 import by.events.backend.model.entity.Event;
@@ -44,16 +45,20 @@ public class EventParticipantsController {
                                             @PathVariable("id") long id) {
         Event event = eventService.getById(id);
         if (event == null) {
-            return new ResponseEntity<>("Event not found", HttpStatus.NOT_FOUND);
+            ErrorResponseDto error = new ErrorResponseDto("Event", "Event not found");
+            return new ResponseEntity<>(error, HttpStatus.NOT_FOUND);
         }
 
         User participant = userService.findOne(userDto.getId());
         if (participant == null) {
-            return new ResponseEntity<>("User not found", HttpStatus.NOT_FOUND);
+            ErrorResponseDto error = new ErrorResponseDto("User", "User not found");
+            return new ResponseEntity<>(error, HttpStatus.NOT_FOUND);
         }
 
         if (event.getParticipants().contains(participant)) {
-            return new ResponseEntity<>("User already participate in event", HttpStatus.NOT_FOUND);
+            ErrorResponseDto error = new ErrorResponseDto("User",
+                    "User already participate in event");
+            return new ResponseEntity<>(error, HttpStatus.NOT_FOUND);
         }
         event.getParticipants().add(participant);
         eventService.saveOrUpdate(event);
@@ -70,16 +75,20 @@ public class EventParticipantsController {
                                                         @PathVariable("id") long id) {
         Event event = eventService.getById(id);
         if (event == null) {
-            return new ResponseEntity<>("Event not found", HttpStatus.NOT_FOUND);
+            ErrorResponseDto error = new ErrorResponseDto("Event", "Event not found");
+            return new ResponseEntity<>(error, HttpStatus.NOT_FOUND);
         }
 
         User participant = userService.findOne(userDto.getId());
         if (participant == null) {
-            return new ResponseEntity<>("User not found", HttpStatus.NOT_FOUND);
+            ErrorResponseDto error = new ErrorResponseDto("User", "User not found");
+            return new ResponseEntity<>(error, HttpStatus.NOT_FOUND);
         }
 
         if (!event.getParticipants().contains(participant)) {
-            return new ResponseEntity<>("User isn't participating in this event", HttpStatus.NOT_FOUND);
+            ErrorResponseDto error = new ErrorResponseDto("User",
+                    "User isn't participating in this event");
+            return new ResponseEntity<>(error, HttpStatus.NOT_FOUND);
         }
         event.getParticipants().remove(participant);
         eventService.saveOrUpdate(event);
