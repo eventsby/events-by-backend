@@ -75,7 +75,6 @@ public class EventController {
     public ResponseEntity<?> deleteOrder(@AuthenticationPrincipal User userPrincipal,
                                          @PathVariable("id") long id) {
         Event event = eventService.getById(id);
-
         if (event == null) {
             return new ResponseEntity<>("Event not found", HttpStatus.NOT_FOUND);
         }
