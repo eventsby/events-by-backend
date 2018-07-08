@@ -60,18 +60,28 @@ public class EventParticipantsController {
         return new ResponseEntity<>(EventDto.toDto(event), HttpStatus.CREATED);
     }
 
-//    @PreAuthorize("@securityServiceImpl.hasPermissions(#userPrincipal, #id)")
-//    @RequestMapping(value = "/{id}", method = RequestMethod.DELETE)
-//    public ResponseEntity<?> removeParticipantFromOrder(@AuthenticationPrincipal User userPrincipal,
-//                                                        @PathVariable("id") long id) {
-//        Event event = eventService.getById(id);
-//
-//        if (event == null) {
-//            return new ResponseEntity<>("Event not found", HttpStatus.NOT_FOUND);
-//        }
-//
-//        eventService.delete(id);
-//        return new ResponseEntity<>(id, HttpStatus.NO_CONTENT);
-//    }
+    @PreAuthorize("@securityServiceImpl.hasPermissions(#userPrincipal, #id)")
+    @RequestMapping(value = "/{id}", method = RequestMethod.DELETE)
+    public ResponseEntity<?> removeParticipantFromOrder(@AuthenticationPrincipal User userPrincipal,
+                                                        @RequestBody UserDto userDto,
+                                                        @PathVariable("id") long id) {
+        Event event = eventService.getById(id);
+
+        if (event == null) {
+            return new ResponseEntity<>("Event not found", HttpStatus.NOT_FOUND);
+        }
+
+        User participant = userService.findOne(userDto.getId());
+        if (participant == null) {
+            return new ResponseEntity<>("User not found", HttpStatus.NOT_FOUND);
+        }
+
+        event.getParticipants().remove(participant);
+        eventService.saveOrUpdate(event);
+        participant.getEvents().remove(event);
+        userService.saveOrUpdate(participant);
+
+        return new ResponseEntity<>(EventDto.toDto(event), HttpStatus.OK);
+    }
 
 }
