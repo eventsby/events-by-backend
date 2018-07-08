@@ -61,7 +61,7 @@ public class EventParticipantsController {
     }
 
     @PreAuthorize("@securityServiceImpl.hasPermissions(#userPrincipal, #id)")
-    @RequestMapping(value = "/{id}", method = RequestMethod.DELETE)
+    @RequestMapping(value = "/{id}/participants", method = RequestMethod.DELETE)
     public ResponseEntity<?> removeParticipantFromOrder(@AuthenticationPrincipal User userPrincipal,
                                                         @RequestBody UserDto userDto,
                                                         @PathVariable("id") long id) {
