@@ -1,6 +1,8 @@
 package by.events.backend.controller;
 
+import by.events.backend.model.dto.EventDto;
 import by.events.backend.model.dto.UserDto;
+import by.events.backend.model.entity.Event;
 import by.events.backend.model.entity.User;
 import by.events.backend.service.EventService;
 import by.events.backend.service.UserService;
@@ -9,6 +11,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
@@ -34,34 +37,33 @@ public class EventParticipantsController {
         return new ResponseEntity<>(usersDto, HttpStatus.OK);
     }
 
-//    @RequestMapping(value = "/{id}/participants", method = RequestMethod.POST)
-//    @ResponseBody
-//    public ResponseEntity<?> addParticipant(@AuthenticationPrincipal User userPrincipal,
-//                                            @RequestBody UserDto userDto) {
-//        User user = userService.findOne(userPrincipal.getId());
-//        Event event = Event.toEntity(eventDto);
-//
-//        // TODO Refactor this shit
-//        Organaizer organaizer = organaizerService.findOne(user.getId());
-//        if (organaizer != null) {
-//            event.setOrganaizer(organaizer);
-//            eventService.saveOrUpdate(event);
-//            organaizer.getEvents().add(event);
-//            organaizerService.saveOrUpdate(organaizer);
-//        } else {
-//            Organaizer newOrg = new Organaizer(user);
-//            event.setOrganaizer(newOrg);
-//            eventService.saveOrUpdate(event);
-//            newOrg.getEvents().add(event);
-//            organaizerService.saveOrUpdate(newOrg);
-//        }
-//        return new ResponseEntity<>(EventDto.toDto(event), HttpStatus.CREATED);
-//    }
-//
-//    @PreAuthorize("@securityServiceImpl.hasAdminPermissions(#userPrincipal)")
+    @RequestMapping(value = "/{id}/participants", method = RequestMethod.POST)
+    @ResponseBody
+    public ResponseEntity<?> addParticipant(@AuthenticationPrincipal User userPrincipal,
+                                            @RequestBody UserDto userDto,
+                                            @PathVariable("id") long id) {
+        Event event = eventService.getById(id);
+        if (event == null) {
+            return new ResponseEntity<>("Event not found", HttpStatus.NOT_FOUND);
+        }
+
+        User participant = userService.findOne(userDto.getId());
+        if (participant == null) {
+            return new ResponseEntity<>("User not found", HttpStatus.NOT_FOUND);
+        }
+
+        event.getParticipants().add(participant);
+        eventService.saveOrUpdate(event);
+        participant.getEvents().add(event);
+        userService.saveOrUpdate(participant);
+
+        return new ResponseEntity<>(EventDto.toDto(event), HttpStatus.CREATED);
+    }
+
+//    @PreAuthorize("@securityServiceImpl.hasPermissions(#userPrincipal, #id)")
 //    @RequestMapping(value = "/{id}", method = RequestMethod.DELETE)
-//    public ResponseEntity<?> deleteOrder(@AuthenticationPrincipal User userPrincipal,
-//                                         @PathVariable("id") long id) {
+//    public ResponseEntity<?> removeParticipantFromOrder(@AuthenticationPrincipal User userPrincipal,
+//                                                        @PathVariable("id") long id) {
 //        Event event = eventService.getById(id);
 //
 //        if (event == null) {
