@@ -1,6 +1,7 @@
 package by.events.backend.configuration.security;
 
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.oauth2.config.annotation.web.configuration.EnableResourceServer;
 import org.springframework.security.oauth2.config.annotation.web.configuration.ResourceServerConfigurerAdapter;
@@ -25,7 +26,8 @@ public class OAuth2ServerConfiguration {
             http
                     .authorizeRequests()
                     //.antMatchers("/api/v1/users/**").hasAnyRole("ADMIN", "CUSTOMER", "COURIER")
-                    .antMatchers("/greeting").hasRole("ADMIN");
+                    .antMatchers("/greeting").hasRole("ADMIN")
+                    .antMatchers(HttpMethod.GET, "/api/v1/events").permitAll();
         }
 
     }
