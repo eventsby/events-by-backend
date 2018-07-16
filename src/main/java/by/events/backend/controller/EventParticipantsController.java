@@ -68,18 +68,18 @@ public class EventParticipantsController {
         return new ResponseEntity<>(EventDto.toDto(event), HttpStatus.CREATED);
     }
 
-    @PreAuthorize("@securityServiceImpl.hasPermissions(#userPrincipal, #id)")
-    @RequestMapping(value = "/{id}/participants", method = RequestMethod.DELETE)
+    @PreAuthorize("@securityServiceImpl.hasPermissions(#userPrincipal, #userId)")
+    @RequestMapping(value = "/{id}/participants/{user_id}", method = RequestMethod.DELETE)
     public ResponseEntity<?> removeParticipantFromOrder(@AuthenticationPrincipal User userPrincipal,
-                                                        @RequestBody UserDto userDto,
-                                                        @PathVariable("id") long id) {
+                                                        @PathVariable("id") long id,
+                                                        @PathVariable("user_id") long userId) {
         Event event = eventService.getById(id);
         if (event == null) {
             ErrorResponseDto error = new ErrorResponseDto("Event", "Event not found");
             return new ResponseEntity<>(error, HttpStatus.NOT_FOUND);
         }
 
-        User participant = userService.findOne(userDto.getId());
+        User participant = userService.findOne(userId);
         if (participant == null) {
             ErrorResponseDto error = new ErrorResponseDto("User", "User not found");
             return new ResponseEntity<>(error, HttpStatus.NOT_FOUND);
